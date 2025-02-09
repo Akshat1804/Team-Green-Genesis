@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { MapContainer, TileLayer, Polygon, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import LeftBar from "../components/LeftBar";
+import NavBar from "../components/NavBar";
 
 const carbonData = {
   Delhi: { total: 5000, average: 200, lowest: 150 },
@@ -43,7 +44,7 @@ const leaderboardData = {
 };
 
 const stateCenters = {
-  Delhi: [28.6139, 77.2090],
+  Delhi: [77.17880168381647, 28.58661157360987],
   Maharashtra: [19.7515, 75.7139],
   Karnataka: [15.3173, 75.7139],
   "Tamil Nadu": [11.1271, 78.6569],
@@ -87,23 +88,25 @@ const Dashboard = () => {
   };
 
   return (
-    <div  className="w-[100%] bg-white shadow-lg mt-[2px] h-[90%]">
+    <div  className="   h-[88.6%]">
+      <NavBar />
       <LeftBar />
-      <div className="w-[100%] bg-slate-100 shadow-lg mt-[2px] h-[100%]">
+      <div  className="w-[100%] h-[100%]">
+        <h1 className="text-2xl font-bold px-5 pt-5 ml-[21%]">Dashboard - {selectedState}</h1>
         <div className="flex gap-4 pl-[21%] w-[100%] h-[30%] p-10 ">
-          <div className="w-[340px] h-[120px] p-4 bg-slate-300">
+          <div id="stat-box" className="w-[340px] h-[120px] p-4 bg-slate-300">
             <h3 className="font-bold text-2xl">Total CO₂</h3>
             <p>{carbonStats.total} kg CO₂</p>
           </div>
-          <div className="w-[340px] h-[120px] p-4 bg-slate-300">
+          <div id="stat-box" className="w-[340px] h-[120px] p-4 bg-slate-300">
             <h3 className="font-bold text-2xl">Average CO₂</h3>
             <p>{carbonStats.average} kg CO₂</p>
           </div>
-          <div className="w-[340px] h-[120px] p-4 bg-slate-300">
+          <div id="stat-box" className="w-[340px] h-[120px] p-4 bg-slate-300">
             <h3 className="font-bold text-2xl">Lowest of the Month</h3>
             <p>{carbonStats.lowest} kg CO₂</p>
           </div>
-          <div className="w-[380px] h-[500px] p-5 bg-slate-300">
+          <div id="leaderboard-container" className="w-[380px] h-[500px] p-5 bg-slate-300">
             <h3 className="font-bold">Top 5 Leaderboard</h3>
             <ul>
               {leaderboard.map((user, index) => (
@@ -111,15 +114,15 @@ const Dashboard = () => {
                   {index + 1}. {user.name} - {user.points} 🏆 {user.streak} 🔥
                 </li>
               ))}
-              <Link to="/Game" className="bg-blue-500 p-2 text-white">
+              <Link to="/Game" id="play-game-btn" className="bg-blue-500 p-2 text-white">
                 Play Game
               </Link>
             </ul>
           </div>
         </div>
         <div className="flex gap-4 pl-[21%] w-[100%] h-[30%]">
-          <div className="w-[850px] h-[350px] bg-slate-300">
-            <MapContainer center={mapCenter} zoom={6} style={{ width: "100%", height: "100%" }}>
+          <div id="map-container" className="w-[850px] h-[350px] bg-slate-300">
+            <MapContainer center={mapCenter} zoom={5} style={{ width: "100%", height: "100%" }}>
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               {stateData.map((state, index) => (
                 <Polygon key={index} pathOptions={{ color: getColor(state.emissions), weight: 2, fillOpacity: 0.6 }} positions={state.coordinates.map(coord => [coord[1], coord[0]])}>
