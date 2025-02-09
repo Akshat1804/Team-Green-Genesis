@@ -4,6 +4,7 @@ import Button from "../Ui/Button3"; // ✅ Ensure default export
 import Progress from "../Ui/Progress2"; // ✅ Ensure default export
 import { Users, Code, Plus } from "lucide-react";
 import LeftBar from "../components/LeftBar";
+import NavBar from "../components/NavBar";
 
 const ProjectCollab = () => {
   const [projects, setProjects] = useState([
@@ -70,9 +71,10 @@ const ProjectCollab = () => {
 
   return (
     <div className="w-full bg-white rounded-lg shadow-xl">
+      <NavBar />
       <LeftBar />
       <h2 className="text-2xl ml-[320px] font-bold text-gray-900 mb-4 flex items-center gap-2">
-        <Users className="text-blue-500" /> Collaborative Projects
+        <Users className="text-blue-500 mt-10" /> Collaborative Projects
       </h2>
 
       <div className="grid grid-cols-1 gap-6">
