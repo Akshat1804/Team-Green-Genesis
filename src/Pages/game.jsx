@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Button2 from "../Ui/Button2"; // ✅ Correct import
-import  Progress  from "../Ui/Progress";
+import Progress from "../Ui/Progress";
+import { useStreakPoints } from "../Context/StreakPointsContext"; // Import useStreakPoints
+import LeftBar from "../components/LeftBar";
+import { div } from "@tensorflow/tfjs";
+import NavBar from "../components/NavBar";
 
 export default function Game() {
+  const { streak, points, increaseStreak, increasePoints } = useStreakPoints(); // Get streak and functions from context
   const [happiness, setHappiness] = useState(50);
   const [energy, setEnergy] = useState(50);
   const [ecoActions, setEcoActions] = useState(0);
@@ -23,6 +28,22 @@ export default function Game() {
     "Support sustainable brands",
   ]);
   const [completedGoals, setCompletedGoals] = useState([]);
+  const [tasksToday, setTasksToday] = useState(0); // Track number of tasks completed today
+
+  useEffect(() => {
+    // Get the current date and compare with the last date stored in localStorage
+    const lastCompletedDate = localStorage.getItem("lastCompletedDate");
+    const currentDate = new Date().toLocaleDateString();
+
+    if (lastCompletedDate !== currentDate) {
+      // It's a new day, reset the tasks count
+      localStorage.setItem("tasksToday", 0);
+      setTasksToday(0);
+    } else {
+      // Load the tasks count from localStorage if it's the same day
+      setTasksToday(Number(localStorage.getItem("tasksToday")));
+    }
+  }, []);
 
   const logEcoAction = (goal) => {
     setEcoActions((prev) => prev + 1);
@@ -30,6 +51,22 @@ export default function Game() {
     setEnergy((prev) => Math.min(prev + 5, 100));
     setCompletedGoals([...completedGoals, goal]);
     updateStory();
+
+    // Reward 40 points after completing an action
+    increasePoints(40);
+
+    // Increase task count for the day
+    let updatedTasks = tasksToday + 1;
+    setTasksToday(updatedTasks);
+    localStorage.setItem("tasksToday", updatedTasks);
+
+    // Check if 3 tasks are completed and increase streak
+    if (updatedTasks >= 3) {
+      increaseStreak();
+      localStorage.setItem("lastCompletedDate", new Date().toLocaleDateString()); // Save the current date
+      localStorage.setItem("tasksToday", 0); // Reset task count after streak increase
+      setTasksToday(0); // Reset task counter for the day
+    }
   };
 
   const updateStory = () => {
@@ -45,7 +82,10 @@ export default function Game() {
   };
 
   return (
-    <div className="flex w-full flex-col items-center p-6 bg-slate-100 rounded-2xl shadow-lg ">
+    <div >
+      <NavBar />
+<LeftBar/>
+    <div className="flex w-[70%] ml-[23%]  flex-col items-center p-6    ">
       <motion.div
         animate={{ scale: 1 + ecoActions * 0.05, rotate: ecoActions > 5 ? 10 : 0 }}
         className="text-6xl"
@@ -74,8 +114,8 @@ export default function Game() {
             <li key={index} className="flex justify-between items-center mt-2">
               <span>{goal}</span>
               <button
-                onClick={() => logEcoAction(goal)}
-                className="bg-green-500 hover:bg-green-600 text-white text-xs p-1 rounded"
+                onClick={() => logEcoAction(goal)} // When clicked, call logEcoAction and pass the goal
+                className="bg-[#036406] hover:bg-green-600 text-white text-xs p-2 rounded"
               >
                 Complete ✅
               </button>
@@ -88,5 +128,7 @@ export default function Game() {
         <Button2 /> {/* ✅ Correct usage */}
       </div>
     </div>
+    </div>
+
   );
 }
