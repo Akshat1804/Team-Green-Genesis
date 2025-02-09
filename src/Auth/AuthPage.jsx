@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LeftBar from "../components/LeftBar";
+import LoginNav from "../components/LoginNav";
+
 
 const states = ["Delhi", "Maharashtra", "Karnataka", "Tamil Nadu"];
 
@@ -18,8 +19,16 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <h2 className="text-2xl font-bold mb-4">Select Your State</h2>
+    <div id="img" className=" img flex flex-col items-center justify-start h-screen  bg-gray-100">
+      <LoginNav />
+      <form id="inset" className=" p-20 mt-20 rounded-xl">
+        <h1 className="text-sm">Username:-</h1>
+        <input type="text" placeholder="Enter your name" />
+        <br />
+        <h1 className="text-sm">Password:-</h1>
+        <input type="text" placeholder="Enter your Password" />
+        <br />
+      <h1 className="text-sm ">Select Your State</h1>
       <select
         className="border p-2 rounded"
         value={selectedState}
@@ -38,8 +47,12 @@ const AuthPage = () => {
       >
         Login
       </button>
+      </form>
+
     </div>
   );
 };
 
 export default AuthPage;
+
+
